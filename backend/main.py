@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 import models
@@ -9,6 +10,14 @@ from database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Hotel Booking API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()
@@ -35,4 +44,7 @@ def read_rooms(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 @app.post("/bookings/{user_id}/", response_model=schemas.Booking)
 def create_booking_for_user(user_id: int, booking: schemas.BookingCreate, db: Session = Depends(get_db)):
-    return crud.create_booking(db=db, booking=booking, user_id=user_id)
+    try:
+        return crud.create_booking(db=db, booking=booking, user_id=user_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))

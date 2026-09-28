@@ -33,6 +33,12 @@ def create_room(db: Session, room: schemas.RoomCreate):
 def create_booking(db: Session, booking: schemas.BookingCreate, user_id: int):
     room = db.query(models.Room).filter(models.Room.id == booking.room_id).first()
     
+    if not room:
+        raise ValueError(f"Room with id {booking.room_id} not found")
+    
+    if room.status != "AVAILABLE":
+        raise ValueError(f"Room {room.room_number} is not available for booking")
+    
     days = (booking.check_out_date - booking.check_in_date).days
     if days <= 0:
         days = 1 
