@@ -1,21 +1,13 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Navbar() {
-    const location = useLocation();
-
     return (
-        <nav className="navbar">
-            <Link to="/" className="navbar-brand">
-                <span className="brand-icon">🏨</span>
-                <h2>RDB Hotels</h2>
-            </Link>
-            <div className="navbar-links">
-                <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
-                    Home
-                </Link>
-                <Link to="/rooms" className={location.pathname === '/rooms' ? 'active' : ''}>
-                    Rooms
-                </Link>
+        <nav style={{ padding: '1rem', backgroundColor: '#1a1a1a', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h2 style={{ margin: 0 }}>RDB Hotels</h2>
+            <div>
+                <Link to="/" style={{ color: 'white', marginRight: '15px', textDecoration: 'none' }}>Home</Link>
+                <Link to="/rooms" style={{ color: 'white', marginRight: '15px', textDecoration: 'none' }}>Rooms</Link>
+                <Link to="/add-room" style={{ color: '#28a745', textDecoration: 'none', fontWeight: 'bold' }}>+ Add Room</Link>
             </div>
         </nav>
     );
