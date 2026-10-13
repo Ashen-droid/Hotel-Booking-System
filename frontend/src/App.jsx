@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 import Home from './Home'
 import Rooms from './pages/Rooms'
 import './App.css'
-
+import AddRoom from './pages/AddRoom'
 
 function App() {
   return (
@@ -12,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/rooms" element={<Rooms />} />
+        <Route path="/add-room" element={<AddRoom />} />
       </Routes>
     </BrowserRouter>
   )
