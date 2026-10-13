@@ -19,7 +19,7 @@ function Rooms() {
             setRooms(response.data);
             setError(null);
         } catch (err) {
-            setError('Rooms load කරන්න බැරි උනා. Backend server එක run වෙනවද check කරන්න.');
+            setError('Backend server check');
             console.error('Error fetching rooms:', err);
         } finally {
             setLoading(false);
@@ -73,14 +73,14 @@ function Rooms() {
         <div className="page-container">
             <div className="page-header">
                 <h1>🏨 Available Rooms</h1>
-                <p>ඔබට ගැළපෙන room එක තෝරාගන්න</p>
+                <p> Choose your Room</p>
             </div>
 
             {rooms.length === 0 ? (
                 <div className="empty-state">
                     <span className="empty-icon">🏗️</span>
-                    <h2>Rooms නැහැ</h2>
-                    <p>තාම rooms add කරලා නැහැ. Backend එකෙන් rooms add කරන්න.</p>
+                    <h2>No Rooms</h2>
+                    <p>Not yet Rooms.</p>
                 </div>
             ) : (
                 <div className="rooms-grid">
