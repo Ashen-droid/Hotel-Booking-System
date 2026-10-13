@@ -16,7 +16,7 @@ class Room(RoomBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # USER SCHEMAS
 class UserBase(BaseModel):
@@ -32,7 +32,7 @@ class User(UserBase):
     id: int
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # BOOKING SCHEMAS
 class BookingBase(BaseModel):
@@ -50,4 +50,4 @@ class Booking(BookingBase):
     status: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
