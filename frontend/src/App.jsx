@@ -5,6 +5,7 @@ import Rooms from './pages/Rooms'
 import './App.css'
 import AddRoom from './pages/AddRoom'
 import Register from './pages/Register'
+import BookRoom from './pages/BookRoom'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/rooms" element={<Rooms />} />
         <Route path="/add-room" element={<AddRoom />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/book/:roomId" element={<BookRoom />} />
       </Routes>
     </BrowserRouter>
   )
