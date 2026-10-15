@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Depends, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware 
 from sqlalchemy.orm import Session
 from typing import List
+
 import models
 import schemas
 import crud
@@ -13,7 +14,7 @@ app = FastAPI(title="Hotel Booking API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -30,7 +31,7 @@ def get_db():
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
-        raise HTTPException(status_code=400, detail="Me email eka kalin register wela thiyenne")
+        raise HTTPException(status_code=400, detail="Email is already registered")
     return crud.create_user(db=db, user=user)
 
 @app.post("/rooms/", response_model=schemas.Room)
@@ -48,3 +49,7 @@ def create_booking_for_user(user_id: int, booking: schemas.BookingCreate, db: Se
         return crud.create_booking(db=db, booking=booking, user_id=user_id)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/bookings/{user_id}/", response_model=List[schemas.Booking])
+def get_bookings_for_user(user_id: int, db: Session = Depends(get_db)):
+    return crud.get_user_bookings(db=db, user_id=user_id)

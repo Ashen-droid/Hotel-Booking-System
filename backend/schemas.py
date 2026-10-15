@@ -21,7 +21,7 @@ class Room(RoomBase):
 # USER SCHEMAS
 class UserBase(BaseModel):
     full_name: str
-    email: str 
+    email: EmailStr 
     role: Optional[str] = "GUEST"
 
 class UserCreate(UserBase):
