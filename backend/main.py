@@ -53,7 +53,3 @@ def create_booking_for_user(user_id: int, booking: schemas.BookingCreate, db: Se
 @app.get("/bookings/{user_id}/", response_model=List[schemas.Booking])
 def get_bookings_for_user(user_id: int, db: Session = Depends(get_db)):
     return crud.get_user_bookings(db=db, user_id=user_id)
-
-@app.get("/bookings/{user_id}/", response_model=List[schemas.Booking])
-def read_user_bookings(user_id: int, db: Session = Depends(get_db)):
-    return crud.get_user_bookings(db=db, user_id=user_id)
