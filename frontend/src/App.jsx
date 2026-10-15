@@ -4,6 +4,7 @@ import Home from './Home'
 import Rooms from './pages/Rooms'
 import './App.css'
 import AddRoom from './pages/AddRoom'
+import Register from './pages/Register'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/rooms" element={<Rooms />} />
         <Route path="/add-room" element={<AddRoom />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   )
