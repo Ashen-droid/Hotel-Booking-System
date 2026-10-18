@@ -74,3 +74,6 @@ def cancel_booking(db: Session, booking_id: int):
         db.refresh(booking)
         
     return booking
+
+def get_all_bookings(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Booking).offset(skip).limit(limit).all()
