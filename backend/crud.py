@@ -77,3 +77,13 @@ def cancel_booking(db: Session, booking_id: int):
 
 def get_all_bookings(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Booking).offset(skip).limit(limit).all()
+
+def authenticate_user(db: Session, email: str, password: str):
+    user = get_user_by_email(db, email=email)
+    if not user:
+        return None
+    
+    stored_pw = getattr(user, "password", None) or getattr(user, "hashed_password", None)
+    if stored_pw == password or stored_pw == password + "notreallyhashed":
+        return user
+    return None
