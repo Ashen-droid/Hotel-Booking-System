@@ -60,3 +60,7 @@ def cancel_user_booking(booking_id: int, db: Session = Depends(get_db)):
     if not booking:
         raise HTTPException(status_code=404, detail="Booking eka hoyaganna baha")
     return booking
+
+@app.get("/bookings/", response_model=List[schemas.Booking])
+def read_all_bookings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_all_bookings(db=db, skip=skip, limit=limit)
