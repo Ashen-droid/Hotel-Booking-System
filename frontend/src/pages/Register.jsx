@@ -23,6 +23,7 @@ function Register() {
             .then((response) => {
                 alert("Registration Successful!");
                 localStorage.setItem('userId', response.data.id);
+                localStorage.setItem('userName', response.data.full_name);
                 navigate('/rooms');
             })
             .catch((error) => {
