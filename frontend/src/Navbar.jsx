@@ -10,6 +10,7 @@ function Navbar() {
                 <Link to="/my-bookings" style={{ color: 'white', marginRight: '15px', textDecoration: 'none' }}>My Bookings</Link>
                 <Link to="/add-room" style={{ color: '#28a745', marginRight: '15px', textDecoration: 'none', fontWeight: 'bold' }}>+ Add Room</Link>
                 <Link to="/register" style={{ color: '#ffc107', textDecoration: 'none', fontWeight: 'bold' }}>Register</Link>
+                <Link to="/register" style={{ color: '#ffc107', textDecoration: 'none', fontWeight: 'bold' }}>Register</Link>
             </div>
         </nav>
     );
