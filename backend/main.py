@@ -64,3 +64,14 @@ def cancel_user_booking(booking_id: int, db: Session = Depends(get_db)):
 @app.get("/bookings/", response_model=List[schemas.Booking])
 def read_all_bookings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_all_bookings(db=db, skip=skip, limit=limit)
+
+@app.post("/login/", response_model=schemas.User)
+def login_user(user_credentials: schemas.UserLogin, db: Session = Depends(get_db)):
+    user = crud.authenticate_user(
+        db, 
+        email=user_credentials.email, 
+        password=user_credentials.password
+    )
+    if not user:
+        raise HTTPException(status_code=401, detail="Email eka hari Password eka hari waradi!")
+    return user
