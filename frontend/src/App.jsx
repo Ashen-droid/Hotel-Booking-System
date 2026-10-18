@@ -6,6 +6,7 @@ import './App.css'
 import AddRoom from './pages/AddRoom'
 import Register from './pages/Register'
 import BookRoom from './pages/BookRoom'
+import MyBookings from './pages/MyBookings'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/add-room" element={<AddRoom />} />
         <Route path="/register" element={<Register />} />
         <Route path="/book/:roomId" element={<BookRoom />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
       </Routes>
     </BrowserRouter>
   )
