@@ -53,3 +53,10 @@ def create_booking_for_user(user_id: int, booking: schemas.BookingCreate, db: Se
 @app.get("/bookings/{user_id}/", response_model=List[schemas.Booking])
 def get_bookings_for_user(user_id: int, db: Session = Depends(get_db)):
     return crud.get_user_bookings(db=db, user_id=user_id)
+
+@app.put("/bookings/{booking_id}/cancel", response_model=schemas.Booking)
+def cancel_user_booking(booking_id: int, db: Session = Depends(get_db)):
+    booking = crud.cancel_booking(db=db, booking_id=booking_id)
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking eka hoyaganna baha")
+    return booking

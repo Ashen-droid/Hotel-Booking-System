@@ -60,3 +60,17 @@ def create_booking(db: Session, booking: schemas.BookingCreate, user_id: int):
 
 def get_user_bookings(db: Session, user_id: int):
     return db.query(models.Booking).filter(models.Booking.user_id == user_id).all()
+
+
+def cancel_booking(db: Session, booking_id: int):
+    booking = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
+    
+    if booking:
+        booking.status = "CANCELLED"
+        room = db.query(models.Room).filter(models.Room.id == booking.room_id).first()
+        if room:
+            room.status = "AVAILABLE"    
+        db.commit()
+        db.refresh(booking)
+        
+    return booking
