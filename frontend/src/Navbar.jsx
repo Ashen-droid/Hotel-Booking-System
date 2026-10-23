@@ -4,7 +4,7 @@ function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const userId = localStorage.getItem('userId');
+    const userId   = localStorage.getItem('userId');
     const userName = localStorage.getItem('userName');
     const userRole = localStorage.getItem('userRole');
 
@@ -15,113 +15,174 @@ function Navbar() {
         navigate('/login');
     };
 
+    const isActive = (path) => location.pathname === path;
+
     return (
-        <nav style={{
-            padding: '1rem 3rem',
-            background: 'linear-gradient(90deg, #0f172a 0%, #1e293b 100%)',
-            color: 'white',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-            position: 'sticky',
-            top: 0,
-            zIndex: 1000
-        }}>
-            <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                {/* VELORA SVG Logo Icon */}
-                <svg width="48" height="54" viewBox="0 0 48 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#f5d07a" />
-                            <stop offset="50%" stopColor="#c9922a" />
-                            <stop offset="100%" stopColor="#f5d07a" />
-                        </linearGradient>
-                    </defs>
-                    {/* Crown */}
-                    <polyline points="8,20 14,10 20,17 24,8 28,17 34,10 40,20" fill="none" stroke="url(#goldGrad)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round"/>
-                    {/* Diamond body */}
-                    <polygon points="24,50 6,26 12,20 36,20 42,26" fill="none" stroke="url(#goldGrad)" strokeWidth="2" strokeLinejoin="round"/>
-                    {/* Inner V */}
-                    <polyline points="13,26 24,42 35,26" fill="none" stroke="url(#goldGrad)" strokeWidth="1.8" strokeLinejoin="round" strokeLinecap="round"/>
-                    {/* Diamond top-middle line */}
-                    <line x1="12" y1="20" x2="36" y2="20" stroke="url(#goldGrad)" strokeWidth="1.5"/>
-                    {/* Diamond horizontal mid */}
-                    <line x1="6" y1="26" x2="42" y2="26" stroke="url(#goldGrad)" strokeWidth="1.2" strokeOpacity="0.7"/>
-                    {/* Left facet */}
-                    <line x1="13" y1="26" x2="6" y2="26" stroke="url(#goldGrad)" strokeWidth="1.2" strokeOpacity="0.6"/>
-                    <line x1="13" y1="26" x2="24" y2="20" stroke="url(#goldGrad)" strokeWidth="1.2" strokeOpacity="0.6"/>
-                    {/* Right facet */}
-                    <line x1="35" y1="26" x2="42" y2="26" stroke="url(#goldGrad)" strokeWidth="1.2" strokeOpacity="0.6"/>
-                    <line x1="35" y1="26" x2="24" y2="20" stroke="url(#goldGrad)" strokeWidth="1.2" strokeOpacity="0.6"/>
-                </svg>
+        <>
+            <style>{`
+                .navbar {
+                    padding: 0 2.5rem;
+                    height: 68px;
+                    background: rgba(10,14,26,0.92);
+                    backdrop-filter: blur(20px);
+                    border-bottom: 1px solid rgba(201,168,76,0.12);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1000;
+                    box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+                }
+                .navbar-logo { text-decoration: none; display: flex; align-items: center; gap: 12px; }
+                .navbar-wordmark { display: flex; flex-direction: column; line-height: 1; }
+                .navbar-brand {
+                    font-size: 1.4rem; font-weight: 900; letter-spacing: 3px;
+                    color: #f8fafc; font-family: 'Cinzel Decorative', serif;
+                }
+                .navbar-sub {
+                    font-size: 0.55rem; font-weight: 400; letter-spacing: 6px;
+                    color: #c9a84c; margin-top: 4px; font-family: 'Cinzel', serif;
+                }
 
-                {/* Wordmark */}
-                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-                    <span style={{
-                        fontSize: '1.45rem',
-                        fontWeight: '900',
-                        letterSpacing: '3px',
-                        color: '#f8fafc',
-                        fontFamily: "'Cinzel Decorative', serif"
-                    }}>VELORA</span>
-                    <span style={{
-                        fontSize: '0.58rem',
-                        fontWeight: '400',
-                        letterSpacing: '6px',
-                        color: '#38bdf8',
-                        marginTop: '4px',
-                        fontFamily: "'Cinzel', serif"
-                    }}>HOTELS</span>
+                .navbar-links { display: flex; align-items: center; gap: 6px; }
+
+                .nav-link {
+                    color: rgba(255,255,255,0.55);
+                    text-decoration: none;
+                    font-weight: 500;
+                    font-size: 0.88rem;
+                    padding: 7px 14px;
+                    border-radius: 8px;
+                    transition: color 0.2s, background 0.2s;
+                }
+                .nav-link:hover { color: #c9a84c; background: rgba(201,168,76,0.08); }
+                .nav-link.active { color: #c9a84c; background: rgba(201,168,76,0.1); }
+
+                .nav-admin-group {
+                    display: flex; gap: 6px; align-items: center;
+                    background: rgba(201,168,76,0.06);
+                    border: 1px solid rgba(201,168,76,0.18);
+                    padding: 4px 10px; border-radius: 10px;
+                }
+
+                .nav-user-pill {
+                    background: rgba(255,255,255,0.05);
+                    border: 1px solid rgba(255,255,255,0.1);
+                    padding: 6px 14px;
+                    border-radius: 50px;
+                    font-size: 0.82rem;
+                    color: rgba(255,255,255,0.8);
+                    display: flex; align-items: center; gap: 6px;
+                }
+                .nav-user-pill .admin-badge {
+                    color: #c9a84c; font-weight: 700; font-size: 0.75rem;
+                }
+
+                .nav-btn-login {
+                    color: rgba(255,255,255,0.7);
+                    text-decoration: none;
+                    padding: 7px 16px;
+                    border-radius: 8px;
+                    border: 1px solid rgba(255,255,255,0.15);
+                    font-weight: 500;
+                    font-size: 0.88rem;
+                    transition: all 0.2s;
+                }
+                .nav-btn-login:hover { border-color: rgba(201,168,76,0.4); color: #c9a84c; }
+
+                .nav-btn-register {
+                    background: linear-gradient(135deg, #c9a84c, #e8c97e);
+                    color: #0a0e1a;
+                    text-decoration: none;
+                    padding: 8px 18px;
+                    border-radius: 8px;
+                    font-weight: 700;
+                    font-size: 0.88rem;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    box-shadow: 0 4px 14px rgba(201,168,76,0.3);
+                }
+                .nav-btn-register:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 8px 20px rgba(201,168,76,0.4);
+                }
+
+                .nav-btn-logout {
+                    padding: 7px 14px;
+                    background: rgba(239,68,68,0.12);
+                    border: 1px solid rgba(239,68,68,0.25);
+                    color: #f87171;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    font-size: 0.82rem;
+                    font-family: 'Inter', sans-serif;
+                    transition: all 0.2s;
+                }
+                .nav-btn-logout:hover {
+                    background: rgba(239,68,68,0.22);
+                    border-color: rgba(239,68,68,0.45);
+                }
+                .nav-sep { color: rgba(255,255,255,0.15); padding: 0 2px; }
+            `}</style>
+
+            <nav className="navbar">
+                {/* Logo */}
+                <Link to="/" className="navbar-logo">
+                    <svg width="42" height="48" viewBox="0 0 48 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="goldGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%"   stopColor="#f5d07a" />
+                                <stop offset="50%"  stopColor="#c9922a" />
+                                <stop offset="100%" stopColor="#f5d07a" />
+                            </linearGradient>
+                        </defs>
+                        <polyline points="8,20 14,10 20,17 24,8 28,17 34,10 40,20" fill="none" stroke="url(#goldGrad2)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round"/>
+                        <polygon  points="24,50 6,26 12,20 36,20 42,26"              fill="none" stroke="url(#goldGrad2)" strokeWidth="2" strokeLinejoin="round"/>
+                        <polyline points="13,26 24,42 35,26"                          fill="none" stroke="url(#goldGrad2)" strokeWidth="1.8" strokeLinejoin="round" strokeLinecap="round"/>
+                        <line x1="12" y1="20" x2="36" y2="20" stroke="url(#goldGrad2)" strokeWidth="1.5"/>
+                        <line x1="6"  y1="26" x2="42" y2="26" stroke="url(#goldGrad2)" strokeWidth="1.2" strokeOpacity="0.6"/>
+                    </svg>
+                    <div className="navbar-wordmark">
+                        <span className="navbar-brand">VELORA</span>
+                        <span className="navbar-sub">HOTELS</span>
+                    </div>
+                </Link>
+
+                {/* Links */}
+                <div className="navbar-links">
+                    <Link to="/"      className={`nav-link${isActive('/')       ? ' active' : ''}`}>Home</Link>
+                    <Link to="/rooms" className={`nav-link${isActive('/rooms')  ? ' active' : ''}`}>Explore Rooms</Link>
+
+                    {userId && (
+                        <Link to="/my-bookings" className={`nav-link${isActive('/my-bookings') ? ' active' : ''}`}>My Bookings</Link>
+                    )}
+
+                    {userRole === 'ADMIN' && (
+                        <div className="nav-admin-group">
+                            <Link to="/admin"    className={`nav-link${isActive('/admin')    ? ' active' : ''}`} style={{ padding: '4px 10px' }}>📊 Dashboard</Link>
+                            <span className="nav-sep">|</span>
+                            <Link to="/add-room" className={`nav-link${isActive('/add-room') ? ' active' : ''}`} style={{ padding: '4px 10px', color: '#34d399' }}>+ Add Room</Link>
+                        </div>
+                    )}
+
+                    {userId ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '8px' }}>
+                            <span className="nav-user-pill">
+                                👤 {userName || `User #${userId}`}
+                                {userRole === 'ADMIN' && <span className="admin-badge">(Admin)</span>}
+                            </span>
+                            <button className="nav-btn-logout" onClick={handleLogout}>Logout</button>
+                        </div>
+                    ) : (
+                        <div style={{ display: 'flex', gap: '8px', marginLeft: '8px' }}>
+                            <Link to="/login"    className="nav-btn-login">Login</Link>
+                            <Link to="/register" className="nav-btn-register">Register</Link>
+                        </div>
+                    )}
                 </div>
-            </Link>
-
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '24px', fontSize: '0.95rem' }}>
-                <Link to="/" style={{ color: location.pathname === '/' ? '#38bdf8' : '#e2e8f0', textDecoration: 'none', fontWeight: '500' }}>Home</Link>
-                <Link to="/rooms" style={{ color: location.pathname === '/rooms' ? '#38bdf8' : '#e2e8f0', textDecoration: 'none', fontWeight: '500' }}>Explore Rooms</Link>
-
-                {userId && (
-                    <Link to="/my-bookings" style={{ color: location.pathname === '/my-bookings' ? '#38bdf8' : '#e2e8f0', textDecoration: 'none', fontWeight: '500' }}>My Bookings</Link>
-                )}
-
-                {userRole === 'ADMIN' && (
-                    <div style={{ display: 'flex', gap: '12px', backgroundColor: 'rgba(255,255,255,0.08)', padding: '6px 14px', borderRadius: '8px' }}>
-                        <Link to="/admin" style={{ color: '#38bdf8', textDecoration: 'none', fontWeight: '600' }}>📊 Dashboard</Link>
-                        <span style={{ color: '#475569' }}>|</span>
-                        <Link to="/add-room" style={{ color: '#4ade80', textDecoration: 'none', fontWeight: '600' }}>+ Add Room</Link>
-                    </div>
-                )}
-
-                {userId ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginLeft: '10px' }}>
-                        <span style={{ backgroundColor: '#334155', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem', color: '#f8fafc' }}>
-                            👤 {userName || `User #${userId}`} {userRole === 'ADMIN' && <strong style={{ color: '#fbbf24' }}>(Admin)</strong>}
-                        </span>
-                        <button
-                            onClick={handleLogout}
-                            style={{
-                                padding: '7px 16px',
-                                backgroundColor: '#ef4444',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '6px',
-                                cursor: 'pointer',
-                                fontWeight: '600',
-                                fontSize: '0.85rem'
-                            }}
-                        >
-                            Logout
-                        </button>
-                    </div>
-                ) : (
-                    <div style={{ display: 'flex', gap: '12px' }}>
-                        <Link to="/login" style={{ color: 'white', textDecoration: 'none', padding: '8px 16px', borderRadius: '6px', border: '1px solid #475569', fontWeight: '500' }}>Login</Link>
-                        <Link to="/register" style={{ backgroundColor: '#38bdf8', color: '#0f172a', textDecoration: 'none', padding: '8px 18px', borderRadius: '6px', fontWeight: '600' }}>Register</Link>
-                    </div>
-                )}
-            </div>
-        </nav>
+            </nav>
+        </>
     );
 }
 

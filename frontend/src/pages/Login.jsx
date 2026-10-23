@@ -3,68 +3,74 @@ import api from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
 
 function Login() {
-    const [email, setEmail] = useState('');
+    const [email, setEmail]       = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading]   = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = (e) => {
         e.preventDefault();
-
+        setLoading(true);
         api.post('/login/', { email, password })
             .then((response) => {
-                localStorage.setItem('userId', response.data.id);
+                localStorage.setItem('userId',   response.data.id);
                 localStorage.setItem('userName', response.data.full_name);
                 localStorage.setItem('userRole', response.data.role);
-
-                alert(`Welcome back, ${response.data.full_name}!`);
                 navigate('/rooms');
             })
             .catch((error) => {
-                console.error("Login error:", error);
-                alert("Invalid Email or Password! Karunakara aith check karanna.");
+                console.error('Login error:', error);
+                alert('Invalid Email or Password! Karunakara aith check karanna.');
+                setLoading(false);
             });
     };
 
     return (
-        <div style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: '400px', margin: '2rem auto', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-            <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>Login to Your Account</h2>
+        <div className="auth-page">
+            <div className="auth-card">
+                <div className="auth-eyebrow">✦ Velora Grand Hotel</div>
+                <h1 className="auth-title">Welcome Back</h1>
+                <p className="auth-subtitle">Sign in to manage your reservations</p>
 
-            <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <div>
-                    <label>Email:</label><br />
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        placeholder="Enter your email"
-                        style={{ padding: '10px', width: '100%', boxSizing: 'border-box', marginTop: '5px' }}
-                    />
-                </div>
+                <hr className="auth-divider" />
 
-                <div>
-                    <label>Password:</label><br />
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        placeholder="Enter your password"
-                        style={{ padding: '10px', width: '100%', boxSizing: 'border-box', marginTop: '5px' }}
-                    />
-                </div>
+                <form onSubmit={handleLogin}>
+                    <div className="field-group">
+                        <label className="field-label">Email Address</label>
+                        <input
+                            type="email"
+                            className="field-input"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="you@example.com"
+                            required
+                        />
+                    </div>
 
-                <button
-                    type="submit"
-                    style={{ padding: '10px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', marginTop: '10px' }}
-                >
-                    Login
-                </button>
-            </form>
+                    <div className="field-group">
+                        <label className="field-label">Password</label>
+                        <input
+                            type="password"
+                            className="field-input"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="••••••••"
+                            required
+                        />
+                    </div>
 
-            <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem' }}>
-                Thama account ekak nadda? <Link to="/register" style={{ color: '#007BFF' }}>Register here</Link>
-            </p>
+                    <button type="submit" className="btn-gold" disabled={loading}>
+                        {loading ? 'Signing in…' : '→ Sign In'}
+                    </button>
+                </form>
+
+                <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.83rem', color: 'rgba(255,255,255,0.35)' }}>
+                    Don't have an account?{' '}
+                    <Link to="/register" style={{ color: '#c9a84c', fontWeight: '600', textDecoration: 'none' }}>
+                        Register here
+                    </Link>
+                </p>
+            </div>
         </div>
     );
 }

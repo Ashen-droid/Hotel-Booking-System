@@ -4,76 +4,115 @@ import { useNavigate } from 'react-router-dom';
 
 function AddRoom() {
     const [roomNumber, setRoomNumber] = useState('');
-    const [roomType, setRoomType] = useState('SINGLE');
-    const [price, setPrice] = useState('');
-
-
+    const [roomType, setRoomType]     = useState('SINGLE');
+    const [price, setPrice]           = useState('');
+    const [loading, setLoading]       = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        const newRoom = {
-            room_number: roomNumber,
-            room_type: roomType,
-            price_per_night: parseFloat(price)
-        };
-
-        api.post('/rooms/', newRoom)
-            .then((response) => {
-                alert("Room successfully added!");
-                navigate('/rooms');
-            })
+        setLoading(true);
+        api.post('/rooms/', { room_number: roomNumber, room_type: roomType, price_per_night: parseFloat(price) })
+            .then(() => { navigate('/rooms'); })
             .catch((error) => {
-                console.error("Error adding room:", error);
-                alert("Failed to add room. Check terminal for errors.");
+                console.error('Error adding room:', error);
+                alert('Failed to add room. Check terminal for errors.');
+                setLoading(false);
             });
     };
 
+    const typeDescriptions = {
+        SINGLE: 'Cozy solo room · Standard amenities',
+        DOUBLE: 'Spacious double · Couple / friends',
+        SUITE:  'Luxury suite   · Pool & spa access',
+    };
+
     return (
-        <div style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: '500px', margin: '0 auto' }}>
-            <h2>Add a New Room (Admin)</h2>
+        <div className="auth-page">
+            <div className="auth-card" style={{ maxWidth: '480px' }}>
+                <div className="auth-eyebrow">📊 Admin Panel</div>
+                <h1 className="auth-title">Add New Room</h1>
+                <p className="auth-subtitle">Fill in the details to list a new room on Velora</p>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <div>
-                    <label>Room Number:</label><br />
-                    <input
-                        type="text"
-                        value={roomNumber}
-                        onChange={(e) => setRoomNumber(e.target.value)}
-                        required
-                        style={{ padding: '8px', width: '100%' }}
-                    />
-                </div>
+                <hr className="auth-divider" />
 
-                <div>
-                    <label>Room Type:</label><br />
-                    <select
-                        value={roomType}
-                        onChange={(e) => setRoomType(e.target.value)}
-                        style={{ padding: '8px', width: '100%' }}
-                    >
-                        <option value="SINGLE">Single</option>
-                        <option value="DOUBLE">Double</option>
-                        <option value="SUITE">Suite</option>
-                    </select>
-                </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="field-group">
+                        <label className="field-label">Room Number</label>
+                        <input
+                            type="text"
+                            className="field-input"
+                            value={roomNumber}
+                            onChange={(e) => setRoomNumber(e.target.value)}
+                            placeholder="e.g. 101, 202A"
+                            required
+                        />
+                    </div>
 
-                <div>
-                    <label>Price Per Night (Rs):</label><br />
-                    <input
-                        type="number"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        required
-                        style={{ padding: '8px', width: '100%' }}
-                    />
-                </div>
+                    <div className="field-group">
+                        <label className="field-label">Room Type</label>
+                        <select
+                            className="field-input"
+                            value={roomType}
+                            onChange={(e) => setRoomType(e.target.value)}
+                        >
+                            <option value="SINGLE">Single</option>
+                            <option value="DOUBLE">Double</option>
+                            <option value="SUITE">Suite</option>
+                        </select>
+                        <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>
+                            {typeDescriptions[roomType]}
+                        </span>
+                    </div>
 
-                <button type="submit" style={{ padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                    Save Room
+                    <div className="field-group">
+                        <label className="field-label">Price Per Night (Rs.)</label>
+                        <input
+                            type="number"
+                            className="field-input"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            placeholder="e.g. 15000"
+                            required
+                            min="0"
+                        />
+                    </div>
+
+                    {/* Preview pill */}
+                    {roomNumber && price && (
+                        <div style={{
+                            background: 'rgba(201,168,76,0.07)',
+                            border: '1px solid rgba(201,168,76,0.2)',
+                            borderRadius: '10px',
+                            padding: '12px 16px',
+                            marginBottom: '1rem',
+                            fontSize: '0.82rem',
+                            color: 'rgba(255,255,255,0.55)',
+                        }}>
+                            Preview: <strong style={{ color: '#c9a84c' }}>Room #{roomNumber}</strong> · {roomType} · <strong style={{ color: '#c9a84c' }}>Rs. {parseFloat(price).toLocaleString()}/night</strong>
+                        </div>
+                    )}
+
+                    <button type="submit" className="btn-gold" disabled={loading}>
+                        {loading ? 'Saving…' : '✦ Save Room'}
+                    </button>
+                </form>
+
+                <button
+                    onClick={() => navigate('/admin')}
+                    style={{
+                        display: 'block', width: '100%', marginTop: '1rem',
+                        background: 'none', border: '1px solid rgba(255,255,255,0.08)',
+                        color: 'rgba(255,255,255,0.35)', padding: '11px', borderRadius: '8px',
+                        cursor: 'pointer', fontSize: '0.85rem', fontFamily: "'Inter', sans-serif",
+                        transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={e => { e.target.style.borderColor = 'rgba(255,255,255,0.2)'; e.target.style.color = 'rgba(255,255,255,0.6)'; }}
+                    onMouseLeave={e => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; e.target.style.color = 'rgba(255,255,255,0.35)'; }}
+                >
+                    ← Back to Dashboard
                 </button>
-            </form>
+            </div>
         </div>
     );
 }
