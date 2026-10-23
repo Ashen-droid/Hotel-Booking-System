@@ -6,6 +6,7 @@ function Navbar() {
 
     const userId = localStorage.getItem('userId');
     const userName = localStorage.getItem('userName');
+    const userRole = localStorage.getItem('userRole');
 
     const handleLogout = () => {
         localStorage.removeItem('userId');
@@ -25,19 +26,21 @@ function Navbar() {
                 <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Home</Link>
                 <Link to="/rooms" style={{ color: 'white', textDecoration: 'none' }}>Rooms</Link>
 
-                { }
                 {userId && (
                     <Link to="/my-bookings" style={{ color: 'white', textDecoration: 'none' }}>My Bookings</Link>
                 )}
 
-                <Link to="/admin" style={{ color: '#17a2b8', textDecoration: 'none', fontWeight: 'bold' }}>Admin Dashboard</Link>
-                <Link to="/add-room" style={{ color: '#28a745', textDecoration: 'none', fontWeight: 'bold' }}>+ Add Room</Link>
+                {userRole === 'ADMIN' && (
+                    <>
+                        <Link to="/admin" style={{ color: '#17a2b8', textDecoration: 'none', fontWeight: 'bold' }}>Admin Dashboard</Link>
+                        <Link to="/add-room" style={{ color: '#28a745', textDecoration: 'none', fontWeight: 'bold' }}>+ Add Room</Link>
+                    </>
+                )}
 
-                { }
                 {userId ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '10px' }}>
                         <span style={{ color: '#ffc107', fontWeight: 'bold' }}>
-                            Hi, {userName || `User #${userId}`}
+                            Hi, {userName || `User #${userId}`} {userRole === 'ADMIN' ? '(Admin)' : ''}
                         </span>
                         <button
                             onClick={handleLogout}

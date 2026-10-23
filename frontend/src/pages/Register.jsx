@@ -6,6 +6,7 @@ function Register() {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('GUEST');
 
     const navigate = useNavigate();
 
@@ -16,7 +17,7 @@ function Register() {
             full_name: fullName,
             email: email,
             password: password,
-            role: "GUEST"
+            role: role
         };
 
         api.post('/users/', newUser)
@@ -24,6 +25,8 @@ function Register() {
                 alert("Registration Successful!");
                 localStorage.setItem('userId', response.data.id);
                 localStorage.setItem('userName', response.data.full_name);
+                localStorage.setItem('userRole', response.data.role);
+
                 navigate('/rooms');
             })
             .catch((error) => {
@@ -33,8 +36,8 @@ function Register() {
     };
 
     return (
-        <div style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: '400px', margin: '0 auto' }}>
-            <h2>Create an Account</h2>
+        <div style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: '400px', margin: '2rem auto', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>Create an Account</h2>
 
             <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                 <div>
@@ -44,7 +47,7 @@ function Register() {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         required
-                        style={{ padding: '8px', width: '100%' }}
+                        style={{ padding: '8px', width: '100%', boxSizing: 'border-box', marginTop: '5px' }}
                     />
                 </div>
 
@@ -55,7 +58,7 @@ function Register() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        style={{ padding: '8px', width: '100%' }}
+                        style={{ padding: '8px', width: '100%', boxSizing: 'border-box', marginTop: '5px' }}
                     />
                 </div>
 
@@ -66,11 +69,23 @@ function Register() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{ padding: '8px', width: '100%' }}
+                        style={{ padding: '8px', width: '100%', boxSizing: 'border-box', marginTop: '5px' }}
                     />
                 </div>
 
-                <button type="submit" style={{ padding: '10px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                <div>
+                    <label>Account Role (For Demo):</label><br />
+                    <select
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
+                        style={{ padding: '8px', width: '100%', boxSizing: 'border-box', marginTop: '5px' }}
+                    >
+                        <option value="GUEST">Guest (Customer)</option>
+                        <option value="ADMIN">Hotel Admin</option>
+                    </select>
+                </div>
+
+                <button type="submit" style={{ padding: '10px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', marginTop: '10px' }}>
                     Register
                 </button>
             </form>
