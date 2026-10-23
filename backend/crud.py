@@ -83,7 +83,7 @@ def authenticate_user(db: Session, email: str, password: str):
     if not user:
         return None
     
-    stored_pw = getattr(user, "password", None) or getattr(user, "hashed_password", None)
-    if stored_pw == password or stored_pw == password + "notreallyhashed":
+    # password_hash is stored as password + "notreallyhashed"
+    if user.password_hash == password + "notreallyhashed":
         return user
     return None

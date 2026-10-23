@@ -26,7 +26,7 @@ function MyBookings() {
 
     useEffect(() => {
         fetchBookings();
-    }, [navigate]);
+    }, []);
 
     // Booking eka cancel karana function eka
     const handleCancel = (bookingId) => {
